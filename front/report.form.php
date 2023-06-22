@@ -33,7 +33,7 @@ $DBCONNECTION_REQUIRED  = 0;
 
 include ('../../../inc/includes.php');
 
-Html::header(PluginAddressingAddressing::getTypeName(2), '', "tools", "pluginaddressingaddressing");
+Html::header(PluginIpamAddressing::getTypeName(2), '', "tools", "pluginipamaddressing");
 
 if (!isset($_GET["start"])) {
    $_GET["start"] = 0;
@@ -43,7 +43,7 @@ if (!isset($_GET["export"])) {
    $_GET["export"] = false;
 }
 
-$addressing = new PluginAddressingAddressing();
+$addressing = new PluginIpamAddressing();
 $addressing->showReport($_GET);
 
 Html::footer();

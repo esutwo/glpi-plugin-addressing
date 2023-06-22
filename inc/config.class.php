@@ -32,15 +32,18 @@ if (!defined('GLPI_ROOT')) {
 }
 
 /**
- * Class PluginAddressingConfig
+ * Class PluginIpamConfig
  */
-class PluginAddressingConfig extends CommonDBTM {
+class PluginIpamConfig extends CommonDBTM {
 
-   static $rightname = "plugin_addressing";
+   static $rightname = "plugin_ipam";
 
    function showForm($ID, $options = []) {
 
       $this->getFromDB($ID);
+
+      echo implode(" ", $this->fields);
+      echo $ID;
 
       $system = $this->fields["used_system"];
 
@@ -48,47 +51,47 @@ class PluginAddressingConfig extends CommonDBTM {
       echo "<form method='post' action='".$this->getFormURL()."'>";
 
       echo "<table class='tab_cadre_fixe'>";
-      echo "<tr><th colspan='4'>".__('System for ping', 'addressing')."</th></tr>";
+      /*echo "<tr><th colspan='4'>".__('System for ping', 'ipam')."</th></tr>";*/
 
-      echo "<tr class='tab_bg_1'><td colspan='4'><div class='center'>";
-      $array = [0 => __('Linux ping', 'addressing'),
-                1 => __('Windows', 'addressing'),
-                2 => __('Linux fping', 'addressing'),
-                3 => __('BSD ping', 'addressing'),
-                4 => __('MacOSX ping', 'addressing')];
+      /*echo "<tr class='tab_bg_1'><td colspan='4'><div class='center'>";
+      $array = [0 => __('Linux ping', 'ipam'),
+                1 => __('Windows', 'ipam'),
+                2 => __('Linux fping', 'ipam'),
+                3 => __('BSD ping', 'ipam'),
+                4 => __('MacOSX ping', 'ipam')];
       Dropdown::ShowFromArray("used_system", $array, ['value' => $system]);
-      echo "</div></td></tr>";
+      echo "</div></td></tr>";*/
 
-      echo "<tr><th colspan='4'>".__('Display', 'addressing')."</th></tr>";
+      echo "<tr><th colspan='4'>".__('Display', 'ipam')."</th></tr>";
 
-      echo "<tr class='tab_bg_1'><td>".__('Assigned IP', 'addressing')."</td>";
+      echo "<tr class='tab_bg_1'><td>".__('Assigned IP', 'ipam')."</td>";
       echo "<td>";
       Dropdown::showYesNo("alloted_ip", $this->fields["alloted_ip"]);
       echo "</td>";
 
-      echo "<td>".__('Free IP', 'addressing')."</td>";
+      echo "<td>".__('Free IP', 'ipam')."</td>";
       echo "<td>";
       Dropdown::showYesNo("free_ip", $this->fields["free_ip"]);
       echo "</td>";
       echo "</tr>";
 
-      echo "<tr class='tab_bg_1'><td>".__('Same IP', 'addressing')."</td>";
+      echo "<tr class='tab_bg_1'><td>".__('Same IP', 'ipam')."</td>";
       echo "<td>";
       Dropdown::showYesNo("double_ip", $this->fields["double_ip"]);
       echo "</td>";
 
-      echo "<td>".__('Reserved IP', 'addressing')."</td>";
+      echo "<td>".__('Reserved IP', 'ipam')."</td>";
       echo "<td>";
       Dropdown::showYesNo("reserved_ip", $this->fields["reserved_ip"]);
       echo "</td>";
 
       echo "</tr>";
 
-      echo "<tr class='tab_bg_1'><td colspan='2'>".__('Use Ping', 'addressing')."</td>";
+      /*echo "<tr class='tab_bg_1'><td colspan='2'>".__('Use Ping', 'ipam')."</td>";
       echo "<td colspan='2'>";
       Dropdown::showYesNo("use_ping", $this->fields["use_ping"]);
       echo "</td>";
-      echo "</tr>";
+      echo "</tr>";*/
 
       echo "<tr><th colspan='4'>";
       echo Html::hidden('id', ['value' => 1]);

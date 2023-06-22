@@ -32,21 +32,19 @@ if (!defined('GLPI_ROOT')) {
 }
 
 /**
- * Class PluginAddressingProfile
+ * Class PluginIpamProfile
  */
-class PluginAddressingProfile extends Profile
+class PluginIpamProfile extends Profile
 {
     public static $rightname = "profile";
 
     public static function getAllRights()
     {
         $rights = [
-            ['itemtype'  => 'PluginAddressingAddressing',
-                  'label'     => __('Generate reports', 'addressing'),
-                  'field'     => 'plugin_addressing'],
-            ['itemtype'  => 'PluginAddressingAddressing',
-                  'label'     => __('Use ping on equipment form', 'addressing'),
-                  'field'     => 'plugin_addressing_use_ping_in_equipment']];
+            ['itemtype'  => 'PluginIpamAddressing',
+                  'label'     => __('Generate reports', 'ipam'),
+                  'field'     => 'plugin_ipam']
+        ];
         return $rights;
     }
 
@@ -71,27 +69,13 @@ class PluginAddressingProfile extends Profile
         $profile->getFromDB($profiles_id);
 
         $rights = [
-            ['itemtype'  => 'PluginAddressingAddressing',
-                  'label'     => __('Generate reports', 'addressing'),
-                  'field'     => 'plugin_addressing']];
+            ['itemtype'  => 'PluginIpamAddressing',
+                  'label'     => __('Generate reports', 'ipam'),
+                  'field'     => 'plugin_ipam']];
 
         $profile->displayRightsChoiceMatrix($rights, ['canedit'       => $canedit,
                                                         'default_class' => 'tab_bg_2',
                                                         'title'         => __('General')]);
-
-        echo "<table class='tab_cadre_fixehov'>";
-
-        $effective_rights = ProfileRight::getProfileRights(
-            $profiles_id,
-            ['plugin_addressing_use_ping_in_equipment']
-        );
-        echo "<tr class='tab_bg_2'>";
-        echo "<td width='20%'>".__('Use ping on equipment form', 'addressing')."</td>";
-        echo "<td colspan='5'>";
-        Html::showCheckbox(['name'    => '_plugin_addressing_use_ping_in_equipment[1_0]',
-                                 'checked' => $effective_rights['plugin_addressing_use_ping_in_equipment']]);
-        echo "</td></tr>\n";
-        echo "</table>";
 
         if ($canedit
             && $closeform) {
@@ -108,7 +92,7 @@ class PluginAddressingProfile extends Profile
     {
         if ($item->getType() == 'Profile') {
             if ($item->getField('interface') == 'central') {
-                return _n('IP Adressing', 'IP Adressing', 2, 'addressing');
+                return _n('IPAM', 'IPAM', 2, 'ipam');
             }
             return '';
         }
@@ -124,8 +108,8 @@ class PluginAddressingProfile extends Profile
             //In case there's no right for this profile, create it
             self::addDefaultProfileInfos(
                 $item->getID(),
-                ['plugin_addressing' => 0,
-                      'plugin_addressing_use_ping_in_equipment' => 0]
+                ['plugin_ipam' => 0,
+                      'plugin_ipam_use_ping_in_equipment' => 0]
             );
             $profile->showForm($ID);
         }
@@ -164,8 +148,8 @@ class PluginAddressingProfile extends Profile
     {
         self::addDefaultProfileInfos(
             $profiles_id,
-            ['plugin_addressing'                       => ALLSTANDARDRIGHT,
-             'plugin_addressing_use_ping_in_equipment' => '1']
+            ['plugin_ipam'                       => ALLSTANDARDRIGHT,
+             'plugin_ipam_use_ping_in_equipment' => '1']
         );
     }
 
@@ -180,7 +164,7 @@ class PluginAddressingProfile extends Profile
         foreach ($DB->request("SELECT *
                            FROM `glpi_profilerights` 
                            WHERE `profiles_id`='".$_SESSION['glpiactiveprofile']['id']."' 
-                              AND `name` LIKE '%plugin_addressing%'") as $prof) {
+                              AND `name` LIKE '%plugin_ipam%'") as $prof) {
             if (isset($_SESSION['glpiactiveprofile'])) {
                 $_SESSION['glpiactiveprofile'][$prof['name']] = $prof['rights'];
             }
@@ -191,13 +175,13 @@ class PluginAddressingProfile extends Profile
     {
         global $DB;
 
-        if (!$DB->tableExists('glpi_plugin_addressing_profiles')) {
+        if (!$DB->tableExists('glpi_plugin_ipam_profiles')) {
             return true;
         }
         $dbu      = new DbUtils();
-        $profiles = $dbu->getAllDataFromTable('glpi_plugin_addressing_profiles');
+        $profiles = $dbu->getAllDataFromTable('glpi_plugin_ipam_profiles');
         foreach ($profiles as $id => $profile) {
-            switch ($profile['addressing']) {
+            switch ($profile['ipam']) {
                 case 'r' :
                     $value = READ;
                     break;
@@ -209,10 +193,10 @@ class PluginAddressingProfile extends Profile
                     $value = 0;
                     break;
             }
-            self::addDefaultProfileInfos($profile['profiles_id'], ['plugin_addressing' => $value]);
+            self::addDefaultProfileInfos($profile['profiles_id'], ['plugin_ipam' => $value]);
             self::addDefaultProfileInfos(
                 $profile['profiles_id'],
-                ['plugin_addressing_use_ping_in_equipment'
+                ['plugin_ipam_use_ping_in_equipment'
                        => $profile['use_ping_in_equipment']]
             );
         }

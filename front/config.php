@@ -29,24 +29,24 @@
 
 include ('../../../inc/includes.php');
 
-if (Plugin::isPluginActive("addressing")) {
-   $PluginAddressingConfig = new PluginAddressingConfig();
+if (Plugin::isPluginActive("ipam")) {
+   $PluginIpamConfig = new PluginIpamConfig();
 
    Session::checkRight("config", UPDATE);
 
    if (isset($_POST["update"])) {
-      $PluginAddressingConfig->update($_POST);
+      $PluginIpamConfig->update($_POST);
       Html::back();
 
    } else {
-      Html::header(PluginAddressingAddressing::getTypeName(2), '', "tools", "pluginaddressingaddressing", "addressing");
-      $PluginAddressingConfig->showForm(1);
+      Html::header(PluginIpamAddressing::getTypeName(2), '', "tools", "pluginipamaddressing", "ipam");
+      $PluginIpamConfig->showForm(1);
       Html::footer();
    }
 
 } else {
    Html::header(__('Setup'), '', "config", "plugins");
    echo "<div class='alert alert-important alert-warning d-flex'>";
-   echo "<b>".__('Please activate the plugin', 'addressing')."</b></div>";
+   echo "<b>".__('Please activate the plugin', 'ipam')."</b></div>";
    Html::footer();
 }

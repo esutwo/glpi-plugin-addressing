@@ -28,6 +28,7 @@
  */
 
 include ('../../../inc/includes.php');
+include ('../vendor/autoload.php');
 
 if (!isset($_GET["id"])) {
    $_GET["id"] = "";
@@ -39,60 +40,78 @@ if (isset($_GET["start"])) {
    $start = 0;
 }
 
-$addressing = new PluginAddressingAddressing();
+$ipam = new PluginIpamAddressing();
 
 if (isset($_POST["add"])) {
-   $addressing->check(-1, CREATE, $_POST);
+   $ipam->check(-1, CREATE, $_POST);
    if (!empty($_POST["name"])
       && !empty($_POST["begin_ip"])
-         && !empty($_POST["end_ip"])) {
-      $newID = $addressing->add($_POST);
+         && !empty($_POST["cidr"])) {
+      
+      // check if ip is valid
+      if(!filter_var($_POST['begin_ip'], FILTER_VALIDATE_IP)){
+         Session::addMessageAfterRedirect(__('Invalid IP address', 'ipam'),
+                                          false, ERROR);
+         Html::back();
+      }
+      // check if cidr is valid
+      if(!filter_var($_POST['cidr'], FILTER_VALIDATE_INT) || $_POST['cidr'] < 0 || $_POST['cidr'] > 32){
+         Session::addMessageAfterRedirect(__('Invalid CIDR', 'ipam'),
+                                          false, ERROR);
+         Html::back();
+      }
+
+      // Change Begin IP & End IP to match CIDR
+      $sub = new IPv4\SubnetCalculator($_POST['begin_ip'], $_POST['cidr']);
+      [$_POST['begin_ip'], $_POST['end_ip']] = $sub->getIPAddressRange();
+
+      $newID = $ipam->add($_POST);
 
    } else {
-      Session::addMessageAfterRedirect(__('Problem when adding, required fields are not here', 'addressing'),
+      Session::addMessageAfterRedirect(__('Problem when adding, required fields are not here', 'ipam'),
                                        false, ERROR);
    }
    if ($_SESSION['glpibackcreated']) {
-      Html::redirect($addressing->getFormURL()."?id=".$newID);
+      Html::redirect($ipam->getFormURL()."?id=".$newID);
    }
    Html::back();
 
 } else if (isset($_POST["delete"])) {
-   $addressing->check($_POST['id'], DELETE);
-   $addressing->delete($_POST);
-   $addressing->redirectToList();
+   $ipam->check($_POST['id'], DELETE);
+   $ipam->delete($_POST);
+   $ipam->redirectToList();
 
 } else if (isset($_POST["restore"])) {
-   $addressing->check($_POST['id'], PURGE);
-   $addressing->restore($_POST);
-   $addressing->redirectToList();
+   $ipam->check($_POST['id'], PURGE);
+   $ipam->restore($_POST);
+   $ipam->redirectToList();
 
 } else if (isset($_POST["purge"])) {
-   $addressing->check($_POST['id'], PURGE);
-   $addressing->delete($_POST, 1);
-   $addressing->redirectToList();
+   $ipam->check($_POST['id'], PURGE);
+   $ipam->delete($_POST, 1);
+   $ipam->redirectToList();
 
 } else if (isset($_POST["update"])) {
-   $addressing->check($_POST['id'], UPDATE);
+   $ipam->check($_POST['id'], UPDATE);
    if (!empty($_POST["name"])
       && !empty($_POST["begin_ip"])
          && !empty($_POST["end_ip"])) {
-      $addressing->update($_POST);
+      $ipam->update($_POST);
    } else {
-      Session::addMessageAfterRedirect(__('Problem when adding, required fields are not here', 'addressing'),
+      Session::addMessageAfterRedirect(__('Problem when adding, required fields are not here', 'ipam'),
                                        false, ERROR);
    }
    Html::back();
 
 } else if (isset($_POST["search"])) {
 
-   $addressing->checkGlobal(READ);
-   Html::header(PluginAddressingAddressing::getTypeName(2), '', "tools", "pluginaddressingaddressing");
-   $addressing->display($_POST);
+   $ipam->checkGlobal(READ);
+   Html::header(PluginIpamAddressing::getTypeName(2), '', "tools", "pluginipamaddressing");
+   $ipam->display($_POST);
    Html::footer();
 } else {
-   $addressing->checkGlobal(READ);
-   Html::header(PluginAddressingAddressing::getTypeName(2), '', "tools", "pluginaddressingaddressing");
-   $addressing->display($_GET);
+   $ipam->checkGlobal(READ);
+   Html::header(PluginIpamAddressing::getTypeName(2), '', "tools", "pluginipamaddressing");
+   $ipam->display($_GET);
    Html::footer();
 }

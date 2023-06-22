@@ -26,28 +26,28 @@
  --------------------------------------------------------------------------
  */
 
-.plugin_addressing_ip_double {
+.plugin_ipam_ip_double {
    background-color: #CF9B9B;
 }
 
-.plugin_addressing_ip_free {
+.plugin_ipam_ip_free {
    background-color: #8CB8D8;
 }
 
-.plugin_addressing_ip_reserved {
+.plugin_ipam_ip_reserved {
    background-color: #e78e3f;
 }
 
-.plugin_addressing_ping_on {
+.plugin_ipam_ping_on {
    background-color: #8CB8D8;
 }
 
-.plugin_addressing_ping_off {
+.plugin_ipam_ping_off {
    background-color: #8DA372;
 }
 
 
-.plugin_addressing_ping_equipment {
+.plugin_ipam_ping_equipment {
    border:2px solid #E1CC7B;
    color:white;
    background-color:black;

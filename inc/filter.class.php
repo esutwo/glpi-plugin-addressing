@@ -32,19 +32,19 @@ if (!defined('GLPI_ROOT')) {
 }
 
 /**
- * Class PluginAddressingFilter
+ * Class PluginIpamFilter
  */
-class PluginAddressingFilter extends CommonDBTM {
+class PluginIpamFilter extends CommonDBTM {
 
-   static $rightname = "plugin_addressing";
+   static $rightname = "plugin_ipam";
 
    static function getTypeName($nb = 0) {
 
-      return _n('Filter', 'Filters', $nb, 'addressing');
+      return _n('Filter', 'Filters', $nb, 'ipam');
    }
 
    static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
-      if ($item->getType() == 'PluginAddressingAddressing') {
+      if ($item->getType() == 'PluginIpamAddressing') {
          if ($tabnum == 0) {
             self::showList($_GET);
          }
@@ -81,20 +81,20 @@ class PluginAddressingFilter extends CommonDBTM {
          $this->check(-1, CREATE, $options);
       }
 
-      Html::requireJs("addressing");
+      Html::requireJs("ipam");
 
       $options['formoptions']
-            = "onSubmit='return plugaddr_Check(\"".__('Invalid data !!', 'addressing')."\")'";
+            = "onSubmit='return plugipam_Check(\"".__('Invalid data !!', 'ipam')."\")'";
       $options['colspan'] = 1;
       $this->showFormHeader($options);
 
-      $addressing = new PluginAddressingAddressing();
+      $addressing = new PluginIpamAddressing();
       $addressing->getFromDB($options['items_id']);
 
       echo "<tr class='tab_bg_1'>";
 
       echo Html::hidden('id', ['value' => $ID]);
-      echo Html::hidden('plugin_addressing_addressings_id', ['value' => $options['items_id']]);
+      echo Html::hidden('plugin_ipam_addressings_id', ['value' => $options['items_id']]);
       echo "<td>" . __('Name') . "</td>";
       echo "<td>";
       echo Html::input('name', ['value' => $this->fields['name'], 'size' => 40]);
@@ -111,14 +111,14 @@ class PluginAddressingFilter extends CommonDBTM {
        echo "<tr class='tab_bg_1'>
                <td>".__("Type")."</td>
                <td>";
-      $types = PluginAddressingAddressing::dropdownItemtype();
+      $types = PluginIpamAddressing::dropdownItemtype();
       Dropdown::showFromArray('type', $types,
                               ['value' => $this->fields["type"]]);
       echo "</td>";
       echo "</tr>";
 
       echo "<tr class='tab_bg_1'>";
-      echo "<td>".__('First IP', 'addressing')."</td>"; // Subnet
+      echo "<td>".__('First IP', 'ipam')."</td>"; // Subnet
       echo "<td>";
       if (empty($this->fields["begin_ip"])) {
          $this->fields["begin_ip"] = "...";
@@ -133,22 +133,22 @@ class PluginAddressingFilter extends CommonDBTM {
       }
 
       echo Html::input('_ipdeb0', ['value' => $ipexploded[0],
-                                   'id' => 'plugaddr_ipdeb0',
+                                   'id' => 'plugipam_ipdeb0',
                                    'size' => 3,
                                    'maxlength' => 3,
                                    'class' => 'form-inline']);
       echo Html::input('_ipdeb1', ['value' => $ipexploded[0],
-                                   'id' => 'plugaddr_ipdeb1',
+                                   'id' => 'plugipam_ipdeb1',
                                    'size' => 3,
                                    'maxlength' => 3,
                                    'class' => 'form-inline']);
       echo Html::input('_ipdeb2', ['value' => $ipexploded[0],
-                                   'id' => 'plugaddr_ipdeb2',
+                                   'id' => 'plugipam_ipdeb2',
                                    'size' => 3,
                                    'maxlength' => 3,
                                    'class' => 'form-inline']);
       echo Html::input('_ipdeb3', ['value' => $ipexploded[0],
-                                   'id' => 'plugaddr_ipdeb3',
+                                   'id' => 'plugipam_ipdeb3',
                                    'size' => 3,
                                    'maxlength' => 3,
                                    'class' => 'form-inline']);
@@ -158,7 +158,7 @@ class PluginAddressingFilter extends CommonDBTM {
       echo "</tr>";
 
       echo "<tr class='tab_bg_1'>";
-      echo "<td>".__('Last IP', 'addressing')."</td>"; // Mask
+      echo "<td>".__('Last IP', 'ipam')."</td>"; // Mask
       echo "<td>";
 
       unset($ipexploded);
@@ -176,37 +176,37 @@ class PluginAddressingFilter extends CommonDBTM {
 
       echo "<script type='text/javascript'>
       function test(id) {
-         if (document.getElementById('plugaddr_ipfin' + id).value == '') {
+         if (document.getElementById('plugipam_ipfin' + id).value == '') {
             if (id == 3) {
-               document.getElementById('plugaddr_ipfin' + id).value = '254';
+               document.getElementById('plugipam_ipfin' + id).value = '254';
             } else {
-               document.getElementById('plugaddr_ipfin' + id).value = ".
-         "document.getElementById('plugaddr_ipdeb' + id).value;
+               document.getElementById('plugipam_ipfin' + id).value = ".
+         "document.getElementById('plugipam_ipdeb' + id).value;
             }
          }
       }
       </script>";
 
       echo Html::input('_ipfin0', ['value' => $ipexploded[0],
-                                   'id' => 'plugaddr_ipfin0',
+                                   'id' => 'plugipam_ipfin0',
                                    'size' => 3,
                                    'maxlength' => 3,
                                    'class' => 'form-inline',
                                    'onfocus'=>'test(0)']);
       echo Html::input('_ipfin1', ['value' => $ipexploded[0],
-                                   'id' => 'plugaddr_ipfin1',
+                                   'id' => 'plugipam_ipfin1',
                                    'size' => 3,
                                    'maxlength' => 3,
                                    'class' => 'form-inline',
                                    'onfocus'=>'test(1)']);
       echo Html::input('_ipfin2', ['value' => $ipexploded[0],
-                                   'id' => 'plugaddr_ipfin2',
+                                   'id' => 'plugipam_ipfin2',
                                    'size' => 3,
                                    'maxlength' => 3,
                                    'class' => 'form-inline',
                                    'onfocus'=>'test(2)']);
       echo Html::input('_ipfin3', ['value' => $ipexploded[0],
-                                   'id' => 'plugaddr_ipfin3',
+                                   'id' => 'plugipam_ipfin3',
                                    'size' => 3,
                                    'maxlength' => 3,
                                    'class' => 'form-inline',
@@ -216,13 +216,13 @@ class PluginAddressingFilter extends CommonDBTM {
       echo "</tr>";
 
       echo "<tr class='tab_bg_1'>";
-      echo "<td>".__('Report for the IP Range', 'addressing')."</td>"; // Mask
+      echo "<td>".__('Report for the IP Range', 'ipam')."</td>"; // Mask
       echo "<td>";
-      echo Html::hidden('begin_ip', ['id' => 'plugaddr_ipdeb', 'value' => $this->fields["begin_ip"]]);
-      echo Html::hidden('end_ip', ['id' => 'plugaddr_ipfin', 'value' => $this->fields["end_ip"]]);
-      echo "<div id='plugaddr_range'>-</div>";
+      echo Html::hidden('begin_ip', ['id' => 'plugipam_ipdeb', 'value' => $this->fields["begin_ip"]]);
+      echo Html::hidden('end_ip', ['id' => 'plugipam_ipfin', 'value' => $this->fields["end_ip"]]);
+      echo "<div id='plugipam_range'>-</div>";
       if ($ID > 0) {
-         $js = "plugaddr_Init(\"".__('Invalid data !!', 'addressing')."\");";
+         $js = "plugipam_Init(\"".__('Invalid data !!', 'ipam')."\");";
          echo Html::scriptBlock('$(document).ready(function() {'.$js.'});');
       }
       echo "</td>";
@@ -270,18 +270,18 @@ class PluginAddressingFilter extends CommonDBTM {
             'items_id'   => $item_id,
             'id'         => -1];
          Ajax::updateItemJsCode("viewfilter" . $item_id . "$rand",
-                                PLUGIN_ADDRESSING_WEBDIR . "/ajax/addressing.php",
+                                PLUGIN_IPAM_WEBDIR . "/ajax/addressing.php",
                                 $params);
          echo "};";
          echo "</script>\n";
          echo "<div class='center firstbloc'>" .
          "<a class='submit btn btn-primary me-2' href='javascript:viewAddFilter" . $item_id . "$rand();'>";
-         echo __('Add a filter', 'addressing') . "</a></div>\n";
+         echo __('Add a filter', 'ipam') . "</a></div>\n";
       }
 
       echo "<div class='spaced'>";
 
-      $nb = PluginAddressingFilter::countForItem($item['id']);
+      $nb = PluginIpamFilter::countForItem($item['id']);
 
       if ($canedit && $nb) {
          Html::openMassiveActionsForm('mass' . $rand);
@@ -313,14 +313,14 @@ class PluginAddressingFilter extends CommonDBTM {
          $header_end .= "<th class='center b'>" . __('Name') . "</th>\n";
          $header_end .= "<th class='center b'>" . __('Entity') . "</th>\n";
          $header_end .= "<th class='center b'>" . __('Type') . "</th>\n";
-         $header_end .= "<th class='center b'>" . __('First IP', 'addressing') . "</th>\n";
-         $header_end .= "<th class='center b'>" . __('Last IP', 'addressing') . "</th>\n";
+         $header_end .= "<th class='center b'>" . __('First IP', 'ipam') . "</th>\n";
+         $header_end .= "<th class='center b'>" . __('Last IP', 'ipam') . "</th>\n";
          $header_end .= "</tr>\n";
          echo $header_begin . $header_top . $header_end;
 
          //filters list
          $filter = new self();
-         $datas = $filter->find(['plugin_addressing_addressings_id' => $item_id]);
+         $datas = $filter->find(['plugin_ipam_addressings_id' => $item_id]);
 
          foreach ($datas as $filter_item) {
             $filter->showMinimalFilterForm($item, $filter_item, $canedit, $rand);
@@ -363,7 +363,7 @@ class PluginAddressingFilter extends CommonDBTM {
             'items_id'   => $item["id"],
             'id'         => $filter['id']];
          Ajax::updateItemJsCode("viewfilter" . $item["id"] . "$rand",
-                                PLUGIN_ADDRESSING_WEBDIR. "/ajax/addressing.php",
+                                PLUGIN_IPAM_WEBDIR. "/ajax/addressing.php",
                                 $params);
          echo "};";
          echo "</script>\n";
@@ -373,7 +373,7 @@ class PluginAddressingFilter extends CommonDBTM {
       //display of data backup
       echo "<td $edit>" . $filter['name'] . "</td>";
       echo "<td $edit>" . Dropdown::getDropdownName('glpi_entities', $filter['entities_id']) . "</td>";
-      $types = PluginAddressingAddressing::dropdownItemtype();
+      $types = PluginIpamAddressing::dropdownItemtype();
       echo "<td $edit>" . $types[$filter['type']] . "</td>";
       echo "<td $edit>" . $filter['begin_ip'] . "</td>";
       echo "<td $edit>" . $filter['end_ip'] . "</td>";
@@ -387,7 +387,7 @@ class PluginAddressingFilter extends CommonDBTM {
     */
    static function dropdownFilters($id, $value) {
       $filter = new self();
-      $datas = $filter->find(['plugin_addressing_addressings_id' => $id]);
+      $datas = $filter->find(['plugin_ipam_addressings_id' => $id]);
       $filters = [];
       $filters[0] = Dropdown::EMPTY_VALUE;
       foreach ($datas as $data) {
@@ -403,7 +403,7 @@ class PluginAddressingFilter extends CommonDBTM {
     */
    static function countForItem($id) {
       $filter = new self();
-      $datas = $filter->find(['plugin_addressing_addressings_id' => $id]);
+      $datas = $filter->find(['plugin_ipam_addressings_id' => $id]);
       return count($datas);
    }
 

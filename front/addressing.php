@@ -39,12 +39,12 @@ if (isset($_GET['action']) && $_GET['action'] == 'isName') {
    }
 } else {
 
-   Html::header(PluginAddressingAddressing::getTypeName(2), '', "tools", "pluginaddressingaddressing");
+   Html::header(PluginIpamAddressing::getTypeName(2), '', "tools", "pluginipamaddressing");
 
-   $PluginAddressingAddressing = new PluginAddressingAddressing();
+   $PluginIpamAddressing = new PluginIpamAddressing();
 
-   if ($PluginAddressingAddressing->canView() || Session::haveRight("config", UPDATE)) {
-      Search::show("PluginAddressingAddressing");
+   if ($PluginIpamAddressing->canView() || Session::haveRight("config", UPDATE)) {
+      Search::show("PluginIpamAddressing");
 
    } else {
       Html::displayRightError();

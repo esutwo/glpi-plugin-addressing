@@ -1,5 +1,5 @@
 // Compute and Check the input data
-function plugaddr_Compute(msg) {
+function plugipam_Compute(msg) {
 
    var ipdeb = new Array();
    var ipfin = new Array();
@@ -8,52 +8,52 @@ function plugaddr_Compute(msg) {
    var i;
    var val;
 
-   document.getElementById("plugaddr_range").innerHTML = "";
-   document.getElementById("plugaddr_ipdeb").value = "";
-   document.getElementById("plugaddr_ipfin").value = "";
+   document.getElementById("plugipam_range").innerHTML = "";
+   document.getElementById("plugipam_ipdeb").value = "";
+   document.getElementById("plugipam_ipfin").value = "";
 
    for (var i = 0; i < 4; i++) {
-      val=document.getElementById("plugaddr_ipdeb"+i).value;
+      val=document.getElementById("plugipam_ipdeb"+i).value;
       if (val=='' || isNaN(val) || parseInt(val)<0 || parseInt(val)>255) {
-         document.getElementById("plugaddr_range").innerHTML=msg+" ("+val+")";
+         document.getElementById("plugipam_range").innerHTML=msg+" ("+val+")";
          return false;
       }
       ipdeb[i]=parseInt(val);
 
-      val=document.getElementById("plugaddr_ipfin"+i).value;
+      val=document.getElementById("plugipam_ipfin"+i).value;
       if (val=='' || isNaN(val) || parseInt(val)<0 || parseInt(val)>255) {
-         document.getElementById("plugaddr_range").innerHTML=msg+" ("+val+")";
+         document.getElementById("plugipam_range").innerHTML=msg+" ("+val+")";
          return false;
       }
       ipfin[i]=parseInt(val);
    }
 
    if (ipdeb[0]>ipfin[0]) {
-      document.getElementById("plugaddr_range").innerHTML=msg+" ("+ipdeb[0]+">"+ipfin[0]+")";
+      document.getElementById("plugipam_range").innerHTML=msg+" ("+ipdeb[0]+">"+ipfin[0]+")";
       return false;
    }
    if (ipdeb[0]==ipfin[0] && ipdeb[1]>ipfin[1]) {
-      document.getElementById("plugaddr_range").innerHTML=msg+" ("+ipdeb[1]+">"+ipfin[1]+")";
+      document.getElementById("plugipam_range").innerHTML=msg+" ("+ipdeb[1]+">"+ipfin[1]+")";
       return false;
    }
    if (ipdeb[0]==ipfin[0] && ipdeb[1]==ipfin[1] && ipdeb[2]>ipfin[2]) {
-      document.getElementById("plugaddr_range").innerHTML=msg+" ("+ipdeb[2]+">"+ipfin[2]+")";
+      document.getElementById("plugipam_range").innerHTML=msg+" ("+ipdeb[2]+">"+ipfin[2]+")";
       return false;
    }
    if (ipdeb[0]==ipfin[0] && ipdeb[1]==ipfin[1] && ipdeb[2]==ipfin[2] && ipdeb[3]>ipfin[3]) {
-      document.getElementById("plugaddr_range").innerHTML=msg+" ("+ipdeb[3]+">"+ipfin[3]+")";
+      document.getElementById("plugipam_range").innerHTML=msg+" ("+ipdeb[3]+">"+ipfin[3]+")";
       return false;
    }
-   document.getElementById("plugaddr_range").innerHTML=""+ipdeb[0]+"."+ipdeb[1]+"."+ipdeb[2]+"."+ipdeb[3]+" - "+ipfin[0]+"."+ipfin[1]+"."+ipfin[2]+"."+ipfin[3];
-   document.getElementById("plugaddr_ipdeb").value=""+ipdeb[0]+"."+ipdeb[1]+"."+ipdeb[2]+"."+ipdeb[3];
-   document.getElementById("plugaddr_ipfin").value=""+ipfin[0]+"."+ipfin[1]+"."+ipfin[2]+"."+ipfin[3];
+   document.getElementById("plugipam_range").innerHTML=""+ipdeb[0]+"."+ipdeb[1]+"."+ipdeb[2]+"."+ipdeb[3]+" - "+ipfin[0]+"."+ipfin[1]+"."+ipfin[2]+"."+ipfin[3];
+   document.getElementById("plugipam_ipdeb").value=""+ipdeb[0]+"."+ipdeb[1]+"."+ipdeb[2]+"."+ipdeb[3];
+   document.getElementById("plugipam_ipfin").value=""+ipfin[0]+"."+ipfin[1]+"."+ipfin[2]+"."+ipfin[3];
    return true;
 }
 
 // Check the input data (from onSubmit)
-function plugaddr_Check(msg) {
+function plugipam_Check(msg) {
 
-   if (plugaddr_Compute(msg)) {
+   if (plugipam_Compute(msg)) {
       return true;
    }
    alert(msg);
@@ -61,37 +61,37 @@ function plugaddr_Check(msg) {
 }
 
 // Display initial values
-function plugaddr_Init(msg) {
+function plugipam_Init(msg) {
 
    var ipdeb = new Array();
    var ipfin = new Array();
 
-   var ipdebstr = document.getElementById("plugaddr_ipdeb").value;
-   var ipfinstr = document.getElementById("plugaddr_ipfin").value;
+   var ipdebstr = document.getElementById("plugipam_ipdeb").value;
+   var ipfinstr = document.getElementById("plugipam_ipfin").value;
 
-   document.getElementById("plugaddr_range").innerHTML=""+ipdebstr+" - "+ipfinstr;
+   document.getElementById("plugipam_range").innerHTML=""+ipdebstr+" - "+ipfinstr;
 
    ipdeb=ipdebstr.split(".");
    ipfin=ipfinstr.split(".");
    for (i=0;i<4;i++) {
-      document.getElementById("plugaddr_ipdeb"+i).value=ipdeb[i];
-      document.getElementById("plugaddr_ipfin"+i).value=ipfin[i];
+      document.getElementById("plugipam_ipdeb"+i).value=ipdeb[i];
+      document.getElementById("plugipam_ipfin"+i).value=ipfin[i];
    }
 }
 
 // Refresh the check message after onChange (from text input)
-// function plugaddr_ChangeNumber(msg) {
+// function plugipam_ChangeNumber(msg) {
 //
-//    var lst=document.getElementById("plugaddr_subnet");
+//    var lst=document.getElementById("plugipam_subnet");
 //    if (lst!=null) {
 //        lst.selectedIndex=0;
 //    }
 //
-//    plugaddr_Compute(msg);
+//    plugipam_Compute(msg);
 // }
 
 // Refresh the check message after onChange (from list)
-// function plugaddr_ChangeList(id,msg) {
+// function plugipam_ChangeList(id,msg) {
 //
 //    var i;
 //    var lst=document.getElementById(id);
@@ -113,10 +113,10 @@ function plugaddr_Init(msg) {
 //             ipdeb[3]++;
 //             ipfin[3]--;
 //          }
-//          document.getElementById("plugaddr_ipdeb"+i).value=ipdeb[i];
-//          document.getElementById("plugaddr_ipfin"+i).value=ipfin[i];
+//          document.getElementById("plugipam_ipdeb"+i).value=ipdeb[i];
+//          document.getElementById("plugipam_ipfin"+i).value=ipfin[i];
 //       }
-//       plugaddr_Compute(msg);
+//       plugipam_Compute(msg);
 //    }
 // }
 
@@ -126,7 +126,7 @@ function nameIsThere(params) {
     var typeElm = $('select[name="type"]');
     var divNameItemElm = $('div[id="nameItem"]');
     $.ajax({
-         url: root_doc + '/front/addressing.php',
+         url: root_doc + '/front/ipam.php',
          type: "GET",
          dataType: "json",
          data: {

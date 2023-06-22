@@ -36,10 +36,10 @@ msgstr "Ping informations not available"
 
 #: setup.php:81 inc/addressing.class.php:46 inc/ipcomment.class.php:44
 #: inc/pinginfo.class.php:42 inc/profile.class.php:108
-msgid "IP Adressing"
-msgid_plural "IP Adressing"
-msgstr[0] "IP Adressing"
-msgstr[1] "IP Adressing"
+msgid "IP Addressing"
+msgid_plural "IP Addressing"
+msgstr[0] "IP Addressing"
+msgstr[1] "IP Addressing"
 
 #: ajax/addressing.php:60 inc/ping_equipment.class.php:71
 #: inc/ping_equipment.class.php:87 inc/report.class.php:179

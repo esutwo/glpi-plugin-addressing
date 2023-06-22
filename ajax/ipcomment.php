@@ -50,11 +50,11 @@ $addressing_id = $_POST['addressing_id'];
 $ipname        = $_POST['ipname'];
 $content       = Toolbox::addslashes_deep($_POST['contentC']);
 
-$ipcomment = new PluginAddressingIpcomment();
-if ($ipcomment->getFromDBByCrit(['plugin_addressing_addressings_id' => $addressing_id, 'ipname' => $ipname])) {
+$ipcomment = new PluginIpamIpcomment();
+if ($ipcomment->getFromDBByCrit(['plugin_ipam_addressings_id' => $addressing_id, 'ipname' => $ipname])) {
    $ipcomment->update(['id' => $ipcomment->getID(), 'comments' => $content]);
 } else {
-   $ipcomment->add(['plugin_addressing_addressings_id' => $addressing_id, 'ipname' => $ipname, 'comments' => $content]);
+   $ipcomment->add(['plugin_ipam_addressings_id' => $addressing_id, 'ipname' => $ipname, 'comments' => $content]);
 }
 
 

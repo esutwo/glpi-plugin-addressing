@@ -32,18 +32,18 @@ if (!defined('GLPI_ROOT')) {
 }
 
 /**
- * Class PluginAddressingReserveip
+ * Class PluginIpamReserveip
  */
-class PluginAddressingReserveip extends CommonDBTM {
+class PluginIpamReserveip extends CommonDBTM {
 
-   static $rightname = 'plugin_addressing';
+   static $rightname = 'plugin_ipam';
 
    static function getTypeName($nb = 0) {
-      return __("IP reservation", "addressing");
+      return __("IP reservation", "ipam");
    }
 
    public static function getTable($classname = null) {
-      return "glpi_plugin_addressing_addressings";
+      return "glpi_plugin_ipam_addressings";
    }
 
    /**
@@ -139,7 +139,7 @@ class PluginAddressingReserveip extends CommonDBTM {
       $msg     = [];
       $checkKo = false;
 
-      $mandatory_fields = ['name_reserveip' => __("Object's name", 'addressing'),
+      $mandatory_fields = ['name_reserveip' => __("Object's name", 'ipam'),
                            'ip'   => _n("IP address", "IP addresses", 1)];
 
       foreach ($input as $key => $value) {
@@ -168,12 +168,12 @@ class PluginAddressingReserveip extends CommonDBTM {
    function showReservationForm($ip, $id_addressing, $rand) {
       global $CFG_GLPI;
 
-      echo Html::script(PLUGIN_ADDRESSING_DIR_NOFULL."/addressing.js");
+      echo Html::script(PLUGIN_IPAM_DIR_NOFULL."/ipam.js");
 
-      $addressing = new PluginAddressingAddressing();
+      $addressing = new PluginIpamAddressing();
       $addressing->getFromDB($id_addressing);
 
-      $this->forceTable(PluginAddressingAddressing::getTable());
+      $this->forceTable(PluginIpamAddressing::getTable());
       $this->initForm(-1);
       $options['colspan'] = 2;
       $this->showFormHeader($options);
@@ -184,19 +184,19 @@ class PluginAddressingReserveip extends CommonDBTM {
                <td>" . _n("IP address", "IP addresses", 1) . "</td>
                <td>" . $ip . "</td>
                <td>";
-      $config = new PluginAddressingConfig();
+      $config = new PluginIpamConfig();
       $config->getFromDB('1');
       $system = $config->fields["used_system"];
 
-      $ping_equip = new PluginAddressingPing_Equipment();
+      /*$ping_equip = new PluginIpamPing_Equipment();
       list($message, $error) = $ping_equip->ping($system, $ip);
       if ($error) {
          echo "<i class='fas fa-check-circle fa-1x' style='color:forestgreen'></i><span style='color:forestgreen'>&nbsp;";
-         echo __('Ping: no response - free IP', 'addressing');
+         echo __('Ping: no response - free IP', 'ipam');
       } else {
          echo "<i class='fas fa-exclamation-triangle fa-1x' style='color:orange'></i><span style='color:orange'>&nbsp;";
-         echo __('Ping: got a response - used IP', 'addressing');
-      }
+         echo __('Ping: got a response - used IP', 'ipam');
+      }*/
       echo "</span>";
       echo "</td></tr>";
       $strict_entities = Profile_User::getUserEntities($_SESSION['glpiID'], false);
@@ -213,19 +213,19 @@ class PluginAddressingReserveip extends CommonDBTM {
 
          $params = ['action' => 'entities_networkip', 'entities_id' => '__VALUE__'];
          Ajax::updateItemOnEvent("dropdown_entities_id" . $rand, 'entities_networkip',
-                                 PLUGIN_ADDRESSING_WEBDIR . "/ajax/addressing.php",
+                                 PLUGIN_IPAM_WEBDIR . "/ajax/addressing.php",
                                  $params);
 
          $params = ['action' => 'entities_location', 'entities_id' => '__VALUE__',
                     'value'  => $addressing->fields["locations_id"]];
          Ajax::updateItemOnEvent("dropdown_entities_id" . $rand, 'entities_location',
-                                 PLUGIN_ADDRESSING_WEBDIR . "/ajax/addressing.php",
+                                 PLUGIN_IPAM_WEBDIR . "/ajax/addressing.php",
                                  $params);
 
          $params = ['action' => 'entities_fqdn', 'entities_id' => '__VALUE__',
                     'value'  => $addressing->fields["fqdns_id"]];
          Ajax::updateItemOnEvent("dropdown_entities_id" . $rand, 'entities_fqdn',
-                                 PLUGIN_ADDRESSING_WEBDIR . "/ajax/addressing.php",
+                                 PLUGIN_IPAM_WEBDIR . "/ajax/addressing.php",
                                  $params);
 
          echo "</td><td></td>";
@@ -248,18 +248,18 @@ class PluginAddressingReserveip extends CommonDBTM {
       echo "<tr class='tab_bg_1'>
                <td>" . __("Type") . "</td>
                <td>";
-      $types = PluginAddressingAddressing::dropdownItemtype();
+      $types = PluginIpamAddressing::dropdownItemtype();
       Dropdown::showFromArray('type', $types,
-                              ['on_change' => "nameIsThere(\"" .PLUGIN_ADDRESSING_WEBDIR . "\");"]);
+                              ['on_change' => "nameIsThere(\"" .PLUGIN_IPAM_WEBDIR . "\");"]);
       echo "</td><td></td>";
       echo "</tr>";
       echo "<tr class='tab_bg_1'>
                <td>" . __("Name") . " : </td><td>";
-      $option = ['onChange' => "nameIsThere(\"" . PLUGIN_ADDRESSING_WEBDIR . "\");", 'id' => 'name_reserveip'];
+      $option = ['onChange' => "nameIsThere(\"" . PLUGIN_IPAM_WEBDIR . "\");", 'id' => 'name_reserveip'];
       echo Html::input('name_reserveip', $option);
       echo "</td><td><div style=\"display: none;\" id='nameItem'>";
       echo "<i class='fas fa-exclamation-triangle fa-2x' style='color:orange'></i>&nbsp;";
-      echo __('Name already in use', 'addressing');
+      echo __('Name already in use', 'ipam');
       echo "</div></td>
             </tr>";
 
@@ -303,7 +303,7 @@ class PluginAddressingReserveip extends CommonDBTM {
 
       echo "<tr class='tab_bg_1'>
                <td colspan='4' class='center'>";
-      echo Html::submit(__("Validate the reservation", 'addressing'), ['name'    => 'add',
+      echo Html::submit(__("Validate the reservation", 'ipam'), ['name'    => 'add',
                                                                        'class'   => 'btn btn-primary',
                                                                        'onclick' => "$('#reservation$rand').modal('hide');window.location.reload();return true;"]);
       echo "</td>

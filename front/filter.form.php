@@ -31,7 +31,7 @@ include ('../../../inc/includes.php');
 
 
 
-$filter = new PluginAddressingFilter();
+$filter = new PluginIpamFilter();
 
 if (isset($_POST['add'])) {
    $filter->check(-1, CREATE, $_POST);

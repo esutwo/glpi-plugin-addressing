@@ -32,16 +32,16 @@ if (!defined('GLPI_ROOT')) {
 }
 
 /**
- * Class PluginAddressingIpcomment
+ * Class PluginIpamIpcomment
  */
-class PluginAddressingIpcomment extends CommonDBTM
+class PluginIpamIpcomment extends CommonDBTM
 {
-   static $rightname = "plugin_addressing";
+   static $rightname = "plugin_ipam";
 
    static function getTypeName($nb = 0)
    {
 
-      return _n('IP Adressing', 'IP Adressing', $nb, 'addressing');
+      return _n('IP Addressing', 'IP Addressing', $nb, 'ipam');
    }
 
 
